@@ -12,7 +12,7 @@ const getSeleniumDriverForHeroku = () => {
     process.env.CHROME_DRIVER_PATH
   );
 
-  options.addArguments('--headless'); // This is to disable UI
+  // options.addArguments('--headless'); // This is to disable UI
   options.addArguments('--disable-gpu');
   options.addArguments('--no-sandbox');
 
