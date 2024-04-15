@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 
-app.get('/selenium', async (req, res) => {
+const getSeleniumDriverForHeroku = () => {
   const webdriver = require('selenium-webdriver');
   require('chromedriver');
   const chrome = require('selenium-webdriver/chrome');
@@ -12,16 +12,19 @@ app.get('/selenium', async (req, res) => {
     process.env.CHROME_DRIVER_PATH
   );
 
-  //Don't forget to add these for heroku
-  options.addArguments('--headless');
+  options.addArguments('--headless'); // This is to disable UI
   options.addArguments('--disable-gpu');
   options.addArguments('--no-sandbox');
 
-  let driver = new webdriver.Builder()
+  return new webdriver.Builder()
     .forBrowser('chrome')
     .setChromeOptions(options)
     .setChromeService(serviceBuilder)
     .build();
+};
+
+app.get('/selenium', async (req, res) => {
+  const driver = getSeleniumDriverForHeroku();
 
   await driver.get('http://www.google.com');
   res.send(await driver.getTitle());
